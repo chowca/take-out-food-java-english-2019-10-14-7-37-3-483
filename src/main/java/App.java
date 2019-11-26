@@ -17,8 +17,8 @@ public class App {
     public String bestCharge(List<String> inputs) {
         //TODO: write code here
         int totalPrice = 0;
-        int promoPrice1 = 0;
-        int promoPrice2 = 0;
+        int promo1save = 0;
+        int promo2save = 0;
         ArrayList<String> promoItemString = new ArrayList<String>();
         int[] itemCount;
         String output = "============= Order details =============\n";
@@ -27,13 +27,13 @@ public class App {
             for (Item orderItem : this.itemRepository.findAll()) {
                 if(orderItem.getId().equals(itemTemp[0])){
                     totalPrice += orderItem.getPrice() * Integer.parseInt(itemTemp[1]);
-                    output += orderItem.getName() + " x " + itemTemp[1] + " = " + (int)orderItem.getPrice() * Integer.parseInt(itemTemp[1]) + " yuan\n";
 
+                    output += orderItem.getName() + " x " + itemTemp[1] + " = " + (int)orderItem.getPrice() * Integer.parseInt(itemTemp[1]) + " yuan\n";
                     for(SalesPromotion promo : this.salesPromotionRepository.findAll()){
                         if(promo.getType().equals("50%_DISCOUNT_ON_SPECIFIED_ITEMS")){
                             for(String promoItemId : promo.getRelatedItems()){
                                 if(orderItem.getId().equals(promoItemId)){
-                                    promoPrice2 += 0.5 * orderItem.getPrice() * Integer.parseInt(itemTemp[1]);
+                                    promo2save += 0.5 * orderItem.getPrice() * Integer.parseInt(itemTemp[1]);
                                     promoItemString.add(orderItem.getName());
                                 }
                             }
@@ -44,26 +44,26 @@ public class App {
         }
         output += "-----------------------------------\n";
         if(totalPrice >= 30){
-            promoPrice1 = totalPrice - 6;
+            promo1save = 6;
         }
-        if(promoPrice1 != 0 || promoPrice2 != 0){
+        if(promo1save != 0 || promo2save != 0){
             output += "Promotion used:\n";
-            if(promoPrice1 <= promoPrice2) {
+            if(promo1save >= promo2save) {
                 output += "Deduct 6 yuan when the order reaches 30 yuan, saving 6 yuan\n";
-                totalPrice = promoPrice1;
+                totalPrice -= promo1save;
             }
             else{
                 output += "Half price for certain dishes (";
                 for(int i = 0; i < promoItemString.size(); i++) {
                     output += promoItemString.get(i);
                     if(i !=  promoItemString.size()-1)
-                        output += ", ";
+                        output += "，";
                 }
-                output += ")，saving " + (totalPrice - promoPrice2) + " yuan\n";
-                totalPrice = promoPrice2;
+                output += ")，saving " + promo2save + " yuan\n";
+                totalPrice -= promo2save;
             }
+            output += "-----------------------------------\n";
         }
-        output += "-----------------------------------\n";
         output += "Total：" + totalPrice + " yuan\n";
         output += "===================================";
         return output;

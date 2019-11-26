@@ -15,8 +15,6 @@ public class AppTest {
         List<String> inputs = Arrays.asList("ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1");
         App app = new App(new ItemRepositoryTestImpl(), new SalesPromotionRepositoryTestImpl());
         String receiptString = app.bestCharge(inputs);
-        System.out.println(receiptString);
-        /*
         assertThat(receiptString, is("============= Order details =============\n" +
                 "Braised chicken x 1 = 18 yuan\n" +
                 "Chinese hamburger x 2 = 12 yuan\n" +
@@ -27,10 +25,7 @@ public class AppTest {
                 "-----------------------------------\n" +
                 "Total：25 yuan\n" +
                 "==================================="));
-
-         */
     }
-    /*
     @Test
     public void should_use_buy_30_save_6_sales_promotion(){
         List<String> inputs = Arrays.asList("ITEM0013 x 4", "ITEM0022 x 1");
@@ -64,6 +59,4 @@ public class AppTest {
                 "Total：24 yuan\n" +
                 "==================================="));
     }
-
-     */
 }
